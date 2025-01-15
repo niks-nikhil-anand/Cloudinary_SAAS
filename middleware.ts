@@ -1,24 +1,38 @@
-import { clerkMiddleware , createRouteMatcher} from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
-    "/signin",
-    "/signup",
-    "/",
-    "/home"
-])
-
+  "/sign-in",
+  "/sign-up",
+  "/",
+  "/home",
+]);
 
 const isPublicApiRoute = createRouteMatcher([
-    "/api/videos"
-])
+  "/api/videos",
+]);
 
-export default clerkMiddleware();
+export default clerkMiddleware(async (auth, req) => {
+  const { userId } = await auth();
+  const currentUrl = new URL(req.url);
+  const pathname = currentUrl.pathname;
+
+
+  // Check if the user is accessing a protected dashboard or API route
+  const isAccessingDashboard = pathname === "/home";
+  const isApiRequest = pathname.startsWith("/api");
+
+
+  
+
+  // If all checks pass, allow the request
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
+    "/((?!.*\\..*|_next).*)", // Match all routes except static files and Next.js internals
+    "/", // Match the root route
+    "/(api|trpc)(.*)", // Match API and tRPC routes
   ],
 };
