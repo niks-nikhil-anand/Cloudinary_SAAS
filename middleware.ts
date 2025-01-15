@@ -1,4 +1,16 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware , createRouteMatcher} from "@clerk/nextjs/server";
+
+const isPublicRoute = createRouteMatcher([
+    "/signin",
+    "/signup",
+    "/",
+    "/home"
+])
+
+
+const isPublicApiRoute = createRouteMatcher([
+    "/api/videos"
+])
 
 export default clerkMiddleware();
 
