@@ -22,17 +22,26 @@ export default clerkMiddleware(async (auth, req) => {
   const isAccessingDashboard = pathname === "/home";
   const isApiRequest = pathname.startsWith("/api");
 
+  if(userId && isPublicRoute(req) && !isAccessingDashboard){
+    return NextResponse.redirect(new URL( "/home" , req.url))
+  }
 
-  
+//   not logged In 
 
-  // If all checks pass, allow the request
-  return NextResponse.next();
+if(!userId){
+    if(!isPublicApiRoute(req) && !isPublicApiRoute(req)){
+        return NextResponse.redirect(new URL("/signin", req.url))
+    }
+
+    if(isApiRequest && !isPublicApiRoute(req)){
+        return NextResponse.redirect(new URL("/sigin" , req.url))
+    }
+}
+
+return NextResponse.next()
+
 });
 
 export const config = {
-  matcher: [
-    "/((?!.*\\..*|_next).*)", // Match all routes except static files and Next.js internals
-    "/", // Match the root route
-    "/(api|trpc)(.*)", // Match API and tRPC routes
-  ],
+    matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
