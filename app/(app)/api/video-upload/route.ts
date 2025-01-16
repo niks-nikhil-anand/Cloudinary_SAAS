@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    const title = formData.get('title') as string | null;
-    const description = formData.get('description') as string | null;
-    const originalSize = formData.get('originalSize') as string | null;
+    const title = formData.get('title') as string ;
+    const description = formData.get('description') as string ;
+    const originalSize = formData.get('originalSize') as string ;
 
     if (!file) {
       return NextResponse.json({ error: 'File Not Found' }, { status: 400 });
@@ -61,14 +61,14 @@ export async function POST(request: NextRequest) {
     });
 
     const video = await prisma.video.create({
-      data: {
-        title: title || null,
-        description: description || null,
-        publicId: result.public_id,
-        originalSize: originalSize ? parseInt(originalSize, 10) : null,
-        compressedSize: result.bytes,
-        duration: result.duration || 0,
-      },
+        data: {
+            title,
+            description,
+            publicId: result.public_id,
+            originalSize: originalSize,
+            compressedSize: String(result.bytes),
+            duration: result.duration || 0,
+        }
     });
 
     return NextResponse.json(video, { status: 200 });
