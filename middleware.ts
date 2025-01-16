@@ -30,11 +30,11 @@ export default clerkMiddleware(async (auth, req) => {
 
 if(!userId){
     if(!isPublicApiRoute(req) && !isPublicApiRoute(req)){
-        return NextResponse.redirect(new URL("/signin", req.url))
+        return NextResponse.redirect(new URL("/sign-in", req.url))
     }
 
     if(isApiRequest && !isPublicApiRoute(req)){
-        return NextResponse.redirect(new URL("/sigin" , req.url))
+        return NextResponse.redirect(new URL("/sign-in" , req.url))
     }
 }
 
