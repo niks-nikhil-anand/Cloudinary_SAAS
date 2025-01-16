@@ -38,14 +38,22 @@ export async function POST(request:NextRequest){
 
         const buffer = Buffer.from(bytes);
 
-        await new Promise<CloudinaryUploadResult>(
+        const result = await new Promise<CloudinaryUploadResult>(
             (resolve , reject)=>{
-                cloudinary.uploader.upload_stream(
-                    
+               const uploadStream cloudinary.uploader.upload_stream(
+                   {folder:"next-clodinary-saas"} 
+                   (error , result) => {
+                    if(error) reject(error);
+                    else resolve(result as CloudinaryUploadResult);
+                   }
                 )
+                uploadStream.end(buffer);
             }
         )
+        return NextResponse.json({publicId : result.public_id} , {status : 200})
    } catch (error) {
-    
+    console.log("Upload image failed" , error)
+
+    NextResponse.json({error: "Uploading Image is failed"} , {status : 500})
    } 
 }
