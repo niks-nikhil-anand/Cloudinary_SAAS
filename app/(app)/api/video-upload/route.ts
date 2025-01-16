@@ -23,17 +23,26 @@ interface CloudinaryUploadResult{
 }
 
 export async function POST(request:NextRequest){
-    const {userId} = auth();
-
-    if(!userId){
-        return NextResponse.json({error:"Unauthorised"} , {status:401})
-    }
-
+   
    try {
-        const formData = request.formData();
 
-        const file = formdata.get("file") as File || null ;
+        const {userId} =  await auth();
 
+        if(!userId){
+            return NextResponse.json({error:"Unauthorised"} , {status:401})
+        }
+
+        // Await formData parsing
+    const formData = await request.formData();
+
+    const file = formData.get('file') as File | null;
+    const title = formData.get('title') as string | null;
+    const description = formData.get('description') as string | null;
+    const originalSize = formData.get('originalSize') as string | null;
+
+
+
+        
 
         if(!file){
             return NextResponse.json({error:"File Not Found"} , {status:400})
@@ -47,7 +56,18 @@ export async function POST(request:NextRequest){
         const result = await new Promise<CloudinaryUploadResult>(
             (resolve , reject)=>{
                const uploadStream cloudinary.uploader.upload_stream(
-                   {folder:"next-clodinary-saas"} 
+                   {
+                    resource_type: "video",
+                    folder:"clodinary-saas-video",
+                    transformation:[
+                       { 
+                        quality:"auto" ,
+                        fetch_format :"mp4"
+                       }
+
+                    ]
+
+                } 
                    (error , result) => {
                     if(error) reject(error);
                     else resolve(result as CloudinaryUploadResult);
