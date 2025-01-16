@@ -12,7 +12,9 @@ cloudinary.config({
 
 
 interface CloudinaryUploadResult{
-    public_id:String,
+    public_id:string,
+    byte: number,
+    duration?: number,
     [key:string]:any
 }
 
