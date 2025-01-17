@@ -58,7 +58,7 @@ export default function socialShare() {
     }
   }, [selectedFormat , uploadedImage])
 
-  const handleFIleUpload = async(event : React.ChangeEvent<HTMLInputElement>) =>{
+  const handleFileUpload = async(event : React.ChangeEvent<HTMLInputElement>) =>{
     const file = event.target.files?.[0];
     if(!file) return;
     setIsUploading(true);
@@ -88,7 +88,22 @@ export default function socialShare() {
 
   const handleDownload = () => {
     if(!imageRef.current) return ;
-     
+     fetch(imageRef.current.src)
+     .then((response) => response.blob())
+     .then((blob) => {
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${selectedFormat
+        .replace(/\s+/g,"_")
+        .toLowerCase()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.removeObjectURL(url);
+        document.body.removeChild(link)
+
+     })
   }
 
 
