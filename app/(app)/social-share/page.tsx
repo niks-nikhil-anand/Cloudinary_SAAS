@@ -3,7 +3,7 @@ import React , {useState , useEffect , useRef} from 'react'
 import { CldImage } from 'next-cloudinary';
 
 
-const SocialFormat = {
+const socialFormats = {
   "Facebook Post (1:1)": {
     width: 120,
     height: 120,
@@ -42,11 +42,59 @@ const SocialFormat = {
 };
 
 
+type SocialFormat = keyof typeof socialFormats;
 
-const socialShare = () => {
+
+export default function socialShare() {
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null); 
+  const [selectedFormat, setSelectedFormat] = useState<SocialFormat>("Instagram Square (1:1)"); 
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isTransforming, setIsTransforming] = useState<boolean>(false);
+  const imageRef = useRef<HTMLImageElement >(null);
+
+  useEffect(()=>{
+    if(uploadedImage){
+      setIsTransforming(true);
+    }
+  }, [selectedFormat , uploadedImage])
+
+  const handleFIleUpload = async(event : React.ChangeEvent<HTMLInputElement>) =>{
+    const file = event.target.files?.[0];
+    if(!file) return;
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file" , file);
+
+    try {
+      const response = await fetch("/api/image-upload" ,{
+        method:"POST",
+        body:formData
+      })
+
+      if(!response.ok){
+        throw new Error("Failed to upload to Image")
+      }
+
+      const data = await response.json();
+        setUploadedImage(data.publicId);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to upload a image")
+    }finally{
+      setIsUploading(false);
+    }
+
+  }
+
+  const handleDownload = () => {
+    if(!imageRef.current) return ;
+     
+  }
+
+
   return (
     <div>socialShare</div>
   )
 }
 
-export default socialShare
+ 
