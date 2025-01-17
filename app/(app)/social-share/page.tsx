@@ -100,10 +100,11 @@ export default function socialShare() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        window.URL.removeObjectURL(url);
+        document.body.removeChild(link);
         document.body.removeChild(link)
-
-     })
+     }) .catch((error) => {
+      console.error("Error downloading the image:", error);
+    });
   }
 
 
