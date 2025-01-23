@@ -109,7 +109,29 @@ export default function socialShare() {
 
 
   return (
-    <div>socialShare</div>
+    <div className='container mx-auto p-4  '>
+      <h1 className='text-3xl font-bold text-center'>
+        Social Media Image Creator
+        </h1>
+
+        <div className="card">
+            <div className="card-body">
+              <h2 className="card-title mb-4">Upload an Image</h2>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Choose an image file</span>
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileUpload}
+                  className="file-input file-input-bordered file-input-primary w-full"
+                />
+              </div>
+              </div>
+              </div>
+
+
+    </div>
   )
 }
 
