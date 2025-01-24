@@ -64,6 +64,7 @@ export default function socialShare() {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("file" , file);
+    console.log(formData);
 
     try {
       const response = await fetch("/api/image-upload" ,{
@@ -115,19 +116,22 @@ export default function socialShare() {
       </h1>
 
       <div className="card">
-        <div className="card-body">
-          <h2 className="card-title mb-4">Upload an Image</h2>
+      <div className="card-body bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="card-title mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
+            Upload an Image
+          </h2>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Choose an image file</span>
+              <span className="label-text text-gray-800 dark:text-gray-100">
+                Choose an image file
+              </span>
             </label>
             <input
               type="file"
               onChange={handleFileUpload}
-              className="file-input file-input-bordered file-input-primary w-full"
+              className="file-input file-input-bordered file-input-primary w-full px-4 py-2 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-
           {isUploading && (
             <div className="mt-4">
               <progress className="progress progress-primary w-full"></progress>
@@ -135,46 +139,50 @@ export default function socialShare() {
           )}
 
           {uploadedImage && (
-            <div className="mt-6">
-              <h2 className="card-title mb-4">Select Social Media Format</h2>
-              <div className="form-control">
-                <select
-                  className="select select-bordered w-full"
-                  value={selectedFormat}
-                  onChange={(e) =>
-                    setSelectedFormat(e.target.value as SocialFormat)
-                  }
-                >
-                  {Object.keys(socialFormats).map((format) => (
-                    <option key={format} value={format}>
-                      {format}
-                    </option>
-                  ))}
-                </select>
-              </div>
+           <div className="mt-6">
+           <h2 className="card-title mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
+             Select Social Media Format
+           </h2>
+           <div className="form-control">
+             <select
+               className="select select-bordered w-full px-4 py-2 rounded-lg text-gray-800 bg-gray-100 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               value={selectedFormat}
+               onChange={(e) => setSelectedFormat(e.target.value as SocialFormat)}
+             >
+               {Object.keys(socialFormats).map((format) => (
+                 <option key={format} value={format} className="text-gray-800 dark:text-gray-100">
+                   {format}
+                 </option>
+               ))}
+             </select>
+           </div>
 
-              <div className="mt-6 relative">
-                <h3 className="text-lg font-semibold mb-2">Preview:</h3>
-                <div className="flex justify-center">
-                  {isTransforming && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-base-100 bg-opacity-50 z-10">
-                      <span className="loading loading-spinner loading-lg"></span>
-                    </div>
-                  )}
-                  <CldImage
-                    width={socialFormats[selectedFormat].width}
-                    height={socialFormats[selectedFormat].height}
-                    src={uploadedImage}
-                    sizes="100vw"
-                    alt="transformed image"
-                    crop="fill"
-                    aspectRatio={socialFormats[selectedFormat].aspectRatio}
-                    gravity='auto'
-                    ref={imageRef}
-                    onLoad={() => setIsTransforming(false)}
-                    />
-                </div>
-              </div>
+           <div className="mt-6 relative bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-md">
+  <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">
+    Preview:
+  </h3>
+  <div className="flex justify-center relative">
+    {isTransforming && (
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-700 bg-opacity-70 z-10 rounded-lg">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    )}
+    <CldImage
+      width={socialFormats[selectedFormat].width}
+      height={socialFormats[selectedFormat].height}
+      src={uploadedImage}
+      sizes="100vw"
+      alt="transformed image"
+      crop="fill"
+      aspectRatio={socialFormats[selectedFormat].aspectRatio}
+      gravity="auto"
+      ref={imageRef}
+      onLoad={() => setIsTransforming(false)}
+      className="rounded-lg border border-gray-300 dark:border-gray-600"
+    />
+  </div>
+</div>
+
 
               <div className="card-actions justify-end mt-6">
                 <button className="btn btn-primary" onClick={handleDownload}>
