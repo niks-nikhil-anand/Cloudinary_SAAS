@@ -110,10 +110,10 @@ export default function socialShare() {
 
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Social Media Image Creator
-      </h1>
+    <div className="container mx-auto p-6 max-w-4xl bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg">
+  <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
+    Social Media Image Creator
+  </h1>
 
       <div className="card">
       <div className="card-body bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-md">
