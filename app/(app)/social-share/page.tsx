@@ -88,25 +88,24 @@ export default function socialShare() {
   }
 
   const handleDownload = () => {
-    if(!imageRef.current) return ;
-     fetch(imageRef.current.src)
-     .then((response) => response.blob())
-     .then((blob) => {
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${selectedFormat
-        .replace(/\s+/g,"_")
-        .toLowerCase()}.png`;
+    if (!imageRef.current) return;
+    fetch(imageRef.current.src)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${selectedFormat.replace(/\s+/g, "_").toLowerCase()}.png`;
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
-        document.body.removeChild(link);
-        document.body.removeChild(link)
-     }) .catch((error) => {
-      console.error("Error downloading the image:", error);
-    });
-  }
+        document.body.removeChild(link); // Remove the link only once
+        window.URL.revokeObjectURL(url); // Revoke the URL to free up memory
+      })
+      .catch((error) => {
+        console.error("Error downloading the image:", error);
+      });
+  };
+  
 
 
   return (
